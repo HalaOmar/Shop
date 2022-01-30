@@ -1,0 +1,134 @@
+<%- include ('../parts/top.ejs') %> 
+    <table class="table table-dark admin" style="width: 80%; margin: auto;">
+        <thead>
+          <tr class="table table-info">
+            <th scope="col">#</th>
+            <th scope="col">Item</th>
+            <th scope="col">Price</th>
+            <th scope="col">category</th>
+            <th scope="col">Discription</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+            <%  var x=0;  %> 
+          <%  for(let i=0; i<prods.length ; i++) { %> 
+          <tr class="foredit">
+            <th scope="row" ><%= i %> </th>
+            <td class="name"><%= prods[i].name %></td>
+            <td class="editprice"><%- prods[i].price %></td>
+            <td class="categ"> <%  let categId = prods[i].categId;%>
+           
+ 
+          <%    categos.forEach( (element )=> { if((element._id).toString() == categId.toString() ) { %>
+               <%= element.name%>
+               <%  } }); %>
+            </td>
+            <td class="cartdisc"><%= prods[i].shortDisc %></td>
+            <td></td>
+            <td class="image" value="<%= prods[i].image %>"> <img src="uploads/<%- prods[i].image %>" alt="" style="width: 10%; height: 10%;" > </td>
+            <td><%- prods[i].price %></td>
+            <td> <button type="submit" class="btn btn-info product-edit-btn" data-index="<%- prods[i]._id %>">  <i class="fas fa-edit fa-3x"></i></button></td>
+            <td> <button type="submit" class="btn btn-danger delete-btn" data-index="<%- prods[i]._id %>">  <i class="fas fa-trash-alt fa-3x"></i></button></td>
+          </tr>
+          <% }%>
+
+        </tbody>
+      </table> 
+
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="deletemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <form action="delete-product" method="post">
+ <input type="text" id="clicked-item" name="prod" value="" hidden>
+            <div class="modal-body">
+                Are you sure you want delete this product
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- edit Modal -->
+  <div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <form action="edit-product" method="post" enctype="multipart/form-data">
+        
+            <input type="text" name="prodId" value="" id="edit_Byid" hidden> 
+
+              
+           
+            <div class="input-group mb-3" style="width: 80%; margin: 0 auto;">
+                <input type="text" class="form-control category" name="catName" aria-label="Text input with dropdown button" value="">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Category</button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                   <%  for(let i =0 ; i<categos.length ; i++ ) {%>
+                  <li class="cat-li"><a class="dropdown-item li-href" href="#" ><%- categos[i].name%></a></li>
+ <% } %>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Separated link</a></li>
+                </ul>
+              </div>
+               <!-- input text area -->
+               <div class="input-group mb-3" style="width: 80%; margin: 0 auto;">
+                <span class="input-group-text">discription</span>
+                <!-- <span class="input-group-text">0.00</span> -->
+                <input type="text" class="form-control cartdisc" name="shortDisc" aria-label="Dollar amount (with dot and two decimal places)" value="">
+              </div>
+
+              <div class="input-group mb-3" style="width: 80%; margin: 0 auto;">
+                <span class="input-group-text"> $ Price</span>
+                <span class="input-group-text">0.00</span>
+                <input type="text" class="form-control price" name="price" aria-label="Dollar amount (with dot and two decimal places)">
+              </div>
+
+              <div class="input-group mb-3" style="width: 80%; margin: 0 auto;">
+                <span class="input-group-text" id="inputGroup-sizing-default">Product name</span>
+                <input type="text" class="form-control edited-prod" name="name" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="" >
+              </div>
+               <!--  -->
+            <div class="modal-body">
+                Are you sure you want edit this product
+              </div>
+
+              <div class="mb-3" style="width: 80%; margin: 0 auto;">
+                <label for="formFileMultiple" class="form-label">Multiple files input example</label>
+                <input class="form-control edit-img" type="file"  name="prodImgs" value="">
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">Save</button>
+              </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+  
+
+    <%- include('../parts/bottom.ejs')%>

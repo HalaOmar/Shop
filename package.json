@@ -1,0 +1,39 @@
+{
+  "name": "Shop",
+  "version": "1.0.0",
+  "description": "Shop Repository",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:Shop": "nodemon --ignore sessions/" ,
+    "serve" : "nodemon"
+  },
+  "author": "Hala Omar",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.6",
+    "csurf": "^1.11.0",
+    "custom-env": "^2.0.1",
+    "ejs": "^3.1.6",
+    "email-verifier": "^0.4.1",
+    "encrypt": "0.0.1",
+    "express": "^4.17.1",
+    "express-flash": "0.0.2",
+    "express-rate-limit": "^6.0.5",
+    "express-session": "^1.17.2",
+    "helmet": "^5.0.1",
+    "mongoose": "^6.0.7",
+    "multer": "^1.4.3",
+    "nodemon": "^2.0.13",
+    "passport": "^0.5.0",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "session-file-store": "^1.5.0",
+    "stripe": "^8.186.1",
+    "twilio": "^3.72.0",
+    "validator": "^13.7.0"
+  }
+}

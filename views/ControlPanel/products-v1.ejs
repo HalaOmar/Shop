@@ -1,0 +1,322 @@
+<%- include('../parts/top.ejs' )%>
+
+
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb-wrap">
+            <div class="container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Products</a></li>
+                    <li class="breadcrumb-item active">Product List</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Breadcrumb End -->
+        
+        <!-- Product List Start -->
+        <div class="product-view">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8">
+
+                                              <!-- Pagination Start -->
+                                              <div class="col-md-12">
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination justify-content-center">
+                                                        <li class="page-item disabled">
+                                                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                                        </li>
+                                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="#">Next</a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                            <!-- Pagination End -->
+                      <table class="table table-secondary admin" style="width: 100%; margin: 10px;">
+                        <thead>
+                          <tr class="table">
+                            <th scope="col">#</th>
+                            <th scope="col">Item</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">category</th>
+                            <th scope="col">Discription</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
+                            
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <%  var x=0;  %> 
+                          <%  for(let i=0; i<prods.length ; i++) { %> 
+                          <tr class="foredit">
+                            <th scope="row" ><%= i %> </th>
+                            <td class="name"><%= prods[i].name %></td>
+                            <td class="editprice"><%= prods[i].price %></td>
+                            <td class="editcategory"> <% let categId = prods[i].categId;%>
+                           
+                 
+                          <%    categos.forEach( (element )=> { if((element._id).toString() == categId.toString() ) { %>
+                               <%= element.name%>
+                               <%  } }); %>
+                            </td>
+                            <td class="cartdisc"><%= prods[i].shortDisc %></td>
+                            <td></td>
+                            <td class="image" value="<%= prods[i].image %>"> <img src="uploads/<%- prods[i].image %>" alt="" style="width: 10%; height: 10%;" > </td>
+                            <td><%- prods[i].price %></td>
+                            <td> <button type="submit" class="btn btn-info product-edit-btn" data-index="<%- prods[i]._id %>">  <i class="fas fa-edit fa-3x"></i></button></td>
+                            <td> <button type="submit" class="btn btn-danger delete-btn" data-index="<%- prods[i]._id %>">  <i class="fas fa-trash-alt fa-3x"></i></button></td>
+                          </tr>
+                          <% }%>
+                
+                        </tbody>
+                      </table> 
+                
+                
+                  
+                  <!-- Modal -->
+                  <div class="modal fade" id="deletemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                
+                        <form action="delete-product" method="post">
+                 <input type="text" id="clicked-item" name="prod" value="" hidden>
+                            <div class="modal-body">
+                                Are you sure you want delete this product
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                              </div>
+                        </form>
+                
+                      </div>
+                    </div>
+                  </div>
+                
+                  <!-- edit Modal -->
+                  <div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                
+                        <form action="/admin/edit-product" method="post" enctype="multipart/form-data">
+                        
+                            <input type="text" name="prodId" value="" id="edit_Byid" hidden> 
+                
+                              
+                           
+                            <div class="input-group mb-3" style="width: 80%; margin: 0 auto;">
+                                <input type="text" class="form-control category category-to-edit" name="catName" aria-label="Text input with dropdown button" value="">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Category</button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                   <%  for(let i =0 ; i<categos.length ; i++ ) {%>
+                                  <li class="cat-li"><a class="dropdown-item li-href" href="#" ><%- categos[i].name%></a></li>
+                 <% } %>
+                                  <li><hr class="dropdown-divider"></li>
+                                  <li><a class="dropdown-item" href="#">Separated link</a></li>
+                                </ul>
+                              </div>
+                               <!-- input text area -->
+                               <div class="input-group mb-3" style="width: 80%; margin: 0 auto;">
+                                <span class="input-group-text">discription</span>
+                                <!-- <span class="input-group-text">0.00</span> -->
+                                <input type="text" class="form-control cartdisc" name="shortDisc" aria-label="Dollar amount (with dot and two decimal places)" value="">
+                              </div>
+                
+                              <div class="input-group mb-3" style="width: 80%; margin: 0 auto;">
+                                <span class="input-group-text"> $ Price</span>
+                                <span class="input-group-text">0.00</span>
+                                <input type="text" class="form-control price" name="price" aria-label="Dollar amount (with dot and two decimal places)">
+                              </div>
+                
+                              <div class="input-group mb-3" style="width: 80%; margin: 0 auto;">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Product name</span>
+                                <input type="text" class="form-control edited-prod" name="name" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="" >
+                              </div>
+                               <!--  -->
+                            <div class="modal-body">
+                                Are you sure you want edit this product
+                              </div>
+                
+                              <div class="mb-3" style="width: 80%; margin: 0 auto;">
+                                <label for="formFileMultiple" class="form-label">Multiple files input example</label>
+                                <input class="form-control edit-img" type="file"  name="prodImgs" value="">
+                              </div>
+                
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger">Save</button>
+                              </div>
+                        </form>
+                
+                      </div>
+                    </div>
+                  </div>
+                          
+
+                    </div>           
+                    
+                    <!-- Side Bar Start -->
+                    <div class="col-lg-4 sidebar">
+                        <div class="sidebar-widget category">
+                            <h2 class="title">Category</h2>
+                            <nav class="navbar bg-light">
+                                <ul class="navbar-nav">
+                                    <% categos.forEach(element => { %>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/admin/getitems/<%- element._id %>"><i class="fa fa-female"></i><%= element.name %> </a>
+                                        </li>
+                                    <% }) %>
+                           
+                                   
+                                </ul>
+                            </nav>
+                        </div>
+                        
+                        <div class="sidebar-widget widget-slider">
+                            <div class="sidebar-slider normal-slider">
+                                <div class="product-item">
+                                    <div class="product-title">
+                                        <a href="#">Product Name</a>
+                                        <div class="ratting">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="product-image">
+                                        <a href="product-detail.html">
+                                            <img src="/img/product-10.jpg" alt="Product Image">
+                                        </a>
+                                        <div class="product-action">
+                                            <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                            <a href="#"><i class="fa fa-heart"></i></a>
+                                            <a href="#"><i class="fa fa-search"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-price">
+                                        <h3><span>$</span>99</h3>
+                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                    </div>
+                                </div>
+                                <div class="product-item">
+                                    <div class="product-title">
+                                        <a href="#">Product Name</a>
+                                        <div class="ratting">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="product-image">
+                                        <a href="product-detail.html">
+                                            <img src="/img/product-9.jpg" alt="Product Image">
+                                        </a>
+                                        <div class="product-action">
+                                            <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                            <a href="#"><i class="fa fa-heart"></i></a>
+                                            <a href="#"><i class="fa fa-search"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-price">
+                                        <h3><span>$</span>99</h3>
+                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                    </div>
+                                </div>
+                                <div class="product-item">
+                                    <div class="product-title">
+                                        <a href="#">Product Name</a>
+                                        <div class="ratting">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <div class="product-image">
+                                        <a href="product-detail.html">
+                                            <img src="/img/product-8.jpg" alt="Product Image">
+                                        </a>
+                                        <div class="product-action">
+                                            <a href="#"><i class="fa fa-cart-plus"></i></a>
+                                            <a href="#"><i class="fa fa-heart"></i></a>
+                                            <a href="#"><i class="fa fa-search"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="product-price">
+                                        <h3><span>$</span>99</h3>
+                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="sidebar-widget brands">
+                            <h2 class="title">Our Brands</h2>
+                            <ul>
+                                <li><a href="#">Nulla </a><span>(45)</span></li>
+                                <li><a href="#">Curabitur </a><span>(34)</span></li>
+                                <li><a href="#">Nunc </a><span>(67)</span></li>
+                                <li><a href="#">Ullamcorper</a><span>(74)</span></li>
+                                <li><a href="#">Fusce </a><span>(89)</span></li>
+                                <li><a href="#">Sagittis</a><span>(28)</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="sidebar-widget tag">
+                            <h2 class="title">Tags Cloud</h2>
+                            <a href="#">Lorem ipsum</a>
+                            <a href="#">Vivamus</a>
+                            <a href="#">Phasellus</a>
+                            <a href="#">pulvinar</a>
+                            <a href="#">Curabitur</a>
+                            <a href="#">Fusce</a>
+                            <a href="#">Sem quis</a>
+                            <a href="#">Mollis metus</a>
+                            <a href="#">Sit amet</a>
+                            <a href="#">Vel posuere</a>
+                            <a href="#">orci luctus</a>
+                            <a href="#">Nam lorem</a>
+                        </div>
+                    </div>
+                    <!-- Side Bar End -->
+                </div>
+            </div>
+        </div>
+        <!-- Product List End -->  
+        
+        <!-- Brand Start -->
+        <div class="brand">
+            <div class="container-fluid">
+                <div class="brand-slider">
+                    <div class="brand-item"><img src="/img/brand-1.png" alt=""></div>
+                    <div class="brand-item"><img src="/img/brand-2.png" alt=""></div>
+                    <div class="brand-item"><img src="/img/brand-3.png" alt=""></div>
+                    <div class="brand-item"><img src="/img/brand-4.png" alt=""></div>
+                    <div class="brand-item"><img src="/img/brand-5.png" alt=""></div>
+                    <div class="brand-item"><img src="/img/brand-6.png" alt=""></div>
+                </div>
+            </div>
+        </div>
+        <!-- Brand End -->
+
+        <%- include('../parts/bottom.ejs') %>

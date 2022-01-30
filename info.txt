@@ -1,0 +1,29 @@
+This is most likely happening because requests for your assets (images, CSS, JavaScript, etc.) are passing through the middleware stack and triggering passport.session()
+
+app.configure(function() {
+  app.use(express.session({ secret: 'keyboard cat' }));
+  app.use(passport.initialize());
+  // passport session is triggered, causing deserializeUser to be invoked
+  app.use(passport.session());
+  // but request was for a static asset, for which authentication is not
+  // necessary
+  app.use(express.static(__dirname + '/../../public'));
+});
+
+The solution for this is to use express.static above passport.session (and express.session for maximum benefit)
+
+app.configure(function() {
+  app.use(express.logger())
+  // requests for static assets will be handled immediately and will not continue
+  // down the middleware stack
+  app.use(express.static(__dirname + '/../../public'));
+  // any request that gets here is a dynamic page, and benefits from session
+  // support
+  app.use(express.session({ secret: 'keyboard cat' }));
+  app.use(passport.initialize());
+  app.use(passport.session());
+});
+
+Both Connect and Express used to provide examples with static middleware at the bottom, and Passport followed that practice. However, with Connect 2.0, the examples are now reflecting the latest thinking which is to use static middleware early in the chain. This addresses issues such as this one, and I'll be updating Passport's own docs soon.
+
+I've toyed with the idea of adding an exclude paths option to passport.session() (see #4 for further discussion), but I can't really find a compelling reason to do so. If anyone can suggest a use case that would benefit from an exclude option, I'd be happy to implement it. Until then, the fix for this is using static middleware before session middleware.
